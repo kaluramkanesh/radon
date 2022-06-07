@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose")
-const newBookSchema = require("mongoose")
+
 
 const BookSchema = new mongoose.Schema({
     // Create a books collection in your DB ( using bookModel with following fields)- bookName( mandatory field), price containing Indian and european price, year ( should be 2021 if no year is provided) ,
