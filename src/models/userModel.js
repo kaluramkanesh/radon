@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema( {
         type: String,
         enum: ["male", "female", "other"]
     },
+    post:[],
     age: Number,
 }, { timestamps: true });
 

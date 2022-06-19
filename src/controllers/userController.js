@@ -1,6 +1,7 @@
 // const jwt = require("jsonwebtoken");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
+const { post } = require("../routes/route");
 
 const createUser = async function (abcd, xyz) {
   //You can name the req, res objects anything.
@@ -109,6 +110,7 @@ const loginUser1 = async function (req, res) {
   res.setHeader("x-auth-token", token);
   res.send({ status: true, Data: token })
 };
+/*---------------------------practice code------------------------------*/
 const userDetail = async function (req, res) {
   let token = req.headers["x-auth-token"]
   if (!token) return res.send({ status: false, msg: "token must be provided" })
@@ -125,9 +127,33 @@ const userDetail = async function (req, res) {
     res.send({ status: true, UserData: userDetails })
   }
 }
+/*----------------------end practice---------------------------------*/
+
+/*-----------------------practice start---------------------------*/
+const postMessage = async function (req, res) {
+  let message = req.body.message
+  //check if the token is present
+  // check if the token is valid
+  let token = req.headers["x-auth-token"]
+  if (!token) return res.send({ msg: "token must be present dear........." })
+  console.log(token)
+  let decoded = jwt.verify(token, "functionUpRadon")
+  let userId = req.params.userId
+  let decodedUserId = decoded.userId
+  if (decodedUserId != userId) return res.send({ status: false, msg: "userId not matched" })
+  if (!decoded) return res.send({ status: false, msg: "token is incorrect.........!" })
+  let userDetail = await userModel.findById(userId)
+  if (!userDetail) return res.send("No such user axist's.....!")
+  let updatePostMessage = userDetail.post
+      updatePostMessage.push(message)
+  let updateUser = await userModel.findByIdAndUpdate({ _id: userDetail._id }, { post: updatePostMessage }, { new: true })
+  res.send({ msg: "post is posted", status: true, Data: updateUser })
+}
+/*------------------------end practice----------------------------*/
 module.exports.createUser = createUser;
 // module.exports.getUserData = getUserData;
 // module.exports.updateUser = updateUser;
 // module.exports.loginUser = loginUser;
 module.exports.loginUser1 = loginUser1
 module.exports.userDetail = userDetail
+module.exports.postMessage = postMessage

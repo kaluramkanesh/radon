@@ -9,11 +9,12 @@ router.get("/test-me", function (req, res) {
 
 router.post("/users", userController.createUser)
 router.post("/loginUser", userController.loginUser1)
-router.get("/getUserData/:userId",userController.userDetail)
+router.get("/getUserData/:userId", userController.userDetail)
+router.post("/user/:userId/post", userController.postMessage)
 // router.post("/login", userController.loginUser)
 // //The userId is sent by front end
 // router.get("/users/:userId", userController.getUserData)
-// router.get("/GetUsersData/userID", userController.getUserData)
+// router.get("/GetUsersData/userID", userController.getUserData)//mine
 
 // router.put("/users/:userId", userController.updateUser)
 
