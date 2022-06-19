@@ -7,10 +7,18 @@ const createUser = async function (abcd, xyz) {
   //You can name the req, res objects anything.
   //but the first parameter is always the request 
   //the second parameter is always the response
+  try{
   let data = abcd.body;
+   
+  if(Object.keys(data).length==0)return xyz.status(400).send({msg:"User data is not present please provide"})
   let savedData = await userModel.create(data);
   console.log(abcd.newAtribute);
-  xyz.send({ msg: savedData });
+  xyz.status(201).send({ msg: savedData });
+  }
+  catch(error){
+    console.log(error)
+    xyz.status(500).send({msg:"Error",error:error.message})
+  }
 };
 /*-----------------------------------------------------------------------*/
 // const loginUser = async function (req, res) {
@@ -119,7 +127,7 @@ const userDetail = async function (req, res) {
   // var decoded = jwt.verify(token, 'shhhhh');
   // console.log(decoded.foo)
   let decoded = jwt.verify(token, "functionUpRadon")
-  if (!decoded) return res.send({ status: false, msg: "Token is incorrect......" })
+  if (!decoded) return res.status(502).send({ status: false, msg: "Token is incorrect......" })
   let userId = req.params.userId
   let userDetails = await userModel.findById(userId)
   if (!userDetails) return res.send({ status: false, msg: "No such user axist's" })
@@ -140,7 +148,7 @@ const postMessage = async function (req, res) {
   let decoded = jwt.verify(token, "functionUpRadon")
   let userId = req.params.userId
   let decodedUserId = decoded.userId
-  if (decodedUserId != userId) return res.send({ status: false, msg: "userId not matched" })
+  if (decodedUserId != userId) return res.status(404).send({ status: false, msg: "userId not matched" })
   if (!decoded) return res.send({ status: false, msg: "token is incorrect.........!" })
   let userDetail = await userModel.findById(userId)
   if (!userDetail) return res.send("No such user axist's.....!")
